@@ -1,0 +1,29 @@
+services:
+  marvel:
+    build:
+      context: .
+    container_name: avenger
+    ports:
+      - "80:80"
+    volumes:
+      - cap:/app/rogers
+    networks:
+      - thor
+
+
+  drstrange:
+    image: antman_jv
+    container_name: hulk
+    ports:
+      - "8000:8000"
+    networks:
+      - thor
+
+volumes:
+  cap:
+networks:
+  thor:
+
+
+
+

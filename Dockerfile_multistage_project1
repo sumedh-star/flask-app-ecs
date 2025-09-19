@@ -1,0 +1,31 @@
+#stage 1
+
+FROM python:3.9-slim-buster AS project1
+
+WORKDIR /app
+
+COPY . .
+
+RUN  pip install --no-cache-dir -r requirements.txt --target=/app/dev
+
+
+#stage 2
+
+FROM gcr.io/distroless/python3-debian12
+ 
+WORKDIR /app
+
+COPY --from=project1 /app/dev /app/dev
+
+COPY --from=project1 /app .
+
+ENV PYTHONPATH="/app/dev"
+
+EXPOSE 80
+
+CMD ["app.py"]
+
+CMD ["run.py"]
+
+
+
