@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage ("code clone") {
+            steps {
+                git url: "https://github.com/sumedh-star/flask-app-ecs.git", branch: "main"
+            }
+        }
+        
+        stage ("build image") {
+            steps {
+                
+            sh "docker build -t macho-app:latest ."
+        }
+    }
+    stage ("push image"){
+        steps{
+            withCredentials([usernamePassword(
+                credentialsId: "dockerhubid",
+                usernameVariable: "myuser",
+                passwordVariable: "mypass"
+                )]) {
+            sh "docker login -u ${env.myuser} -p ${env.mypass}"
+            sh "docker image tag macho-app:latest ${env.myuser}/macho-app"
+            sh "docker push ${env.myuser}/macho-app "
+            
+            }
+        }
+    }
+    stage ("deploy") {
+        steps {
+            sh "docker compose up -d"
+        }
+    }
+}
+}
