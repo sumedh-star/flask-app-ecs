@@ -1,6 +1,6 @@
 services:
   flask-app:
-    image: sumedh89/bro-app
+    image: sumedh89/macho-app
     container_name: flask-app
     ports:
       - "5000:80"
